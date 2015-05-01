@@ -2,5 +2,8 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-diagram'
+  name: 'ember-diagram',
+  isDevelopingAddon: function() {
+    return true;
+  }
 };
