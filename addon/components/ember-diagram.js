@@ -19,7 +19,7 @@ export default Ember.Component.extend({
     if (gesture !== null && gesture !== undefined) {
       return gesture.mouseDown(evt);
     } else {
-      console.log('@@@@ Mouse Down button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
+      //console.log('@@@@ Mouse Down button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
       return false;
     }
   },
@@ -28,7 +28,7 @@ export default Ember.Component.extend({
     if (gesture !== null && gesture !== undefined) {
       return gesture.mouseMove(evt);
     } else {
-      console.log('@@@@ Mouse Move button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
+      //console.log('@@@@ Mouse Move button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
       return false;
     }
   },
@@ -37,7 +37,7 @@ export default Ember.Component.extend({
     if (gesture !== null && gesture !== undefined) {
       return gesture.mouseUp(evt);
     } else {
-      console.log('@@@@ Mouse Up button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
+      //console.log('@@@@ Mouse Up button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
       return false;
     }
   },
@@ -46,7 +46,7 @@ export default Ember.Component.extend({
     if (gesture !== null && gesture !== undefined) {
       return gesture.click(evt);
     } else {
-      console.log('@@@@ Click button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
+      //console.log('@@@@ Click button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
       return false;
     }
   },
@@ -55,7 +55,7 @@ export default Ember.Component.extend({
     if (gesture !== null && gesture !== undefined) {
       return gesture.mouseUp(evt);
     } else {
-      console.log('@@@@ ContextMenu: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
+      //console.log('@@@@ ContextMenu: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
       return false;
     }
   }

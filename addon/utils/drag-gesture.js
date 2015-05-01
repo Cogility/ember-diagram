@@ -11,8 +11,8 @@ export default Gesture.extend({
     this.get('diagram').set('gesture', this);
     var dragTarget = this.get('component.element');
     var pointLocal = eventToSVGLocal(evt);
-    console.log('@@@@ Mouse down on '+evt.clientX+','+evt.clientY+
-      ' local: '+pointLocal.x+','+pointLocal.y);
+    //console.log('@@@@ Mouse down on '+evt.clientX+','+evt.clientY+
+    //  ' local: '+pointLocal.x+','+pointLocal.y);
     this.dragStart = {x:pointLocal.x, y:pointLocal.y};
     this.trans = dragTarget.ownerSVGElement.createSVGTransform();
     var myTransListAnim=dragTarget.transform;
@@ -26,8 +26,8 @@ export default Gesture.extend({
       var pointLocal = eventToSVGLocal(evt, this.dragTarget);
       pointLocal.x -= this.dragStart.x;
       pointLocal.y -= this.dragStart.y;
-      console.log('@@@@ Mouse move on '+evt.clientX+','+evt.clientY+
-        ' local: '+pointLocal.x+','+pointLocal.y);
+      //console.log('@@@@ Mouse move on '+evt.clientX+','+evt.clientY+
+      //  ' local: '+pointLocal.x+','+pointLocal.y);
       this.trans.setTranslate(pointLocal.x,pointLocal.y);
       this.transList.appendItem(this.trans);
       this.transList.consolidate();
