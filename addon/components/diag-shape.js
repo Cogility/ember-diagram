@@ -11,33 +11,36 @@ export default Ember.Component.extend({
   width: Ember.computed.alias('shape.width'),
 
   initTransform: Ember.on('init', 'didInsertElement', function() {
-    console.log('@@@@ In diag-shape initTransform');
+    //console.log('@@@@ In diag-shape initTransform');
     this.setTransform();
   }),
   updateTransform: Ember.observer('shape.transform', function() {
-    console.log('@@@@ In diag-shape updateTransform');
+    //console.log('@@@@ In diag-shape updateTransform');
     this.setTransform();
   }),
   setTransform: function() {
     var ele = this.get('element');
     if (ele !== null && ele !== undefined) {
-      var base = this.get('element').transform.baseVal;
-      if (base.length === 0) {
-        console.log('@@@@ Initializing transform for element');
-        var ident = this.get('element').ownerSVGElement.createSVGTransform();
-        base.appendItem(ident);
-        base.consolidate();
-      }
-      var mat = base[0].matrix;
-      var tran = this.get('shape.transform');
-      if (tran !== null && tran !== undefined) {
-        console.log('@@@@ Setting transform in component from shape model');
-        mat.a = tran.a;
-        mat.b = tran.b;
-        mat.c = tran.c;
-        mat.d = tran.d;
-        mat.e = tran.e;
-        mat.f = tran.f;
+      var trans = this.get('element').transform;
+      if (trans !== null && trans !== undefined) {
+        var base = trans.baseVal;
+        if (base.length === 0) {
+          //console.log('@@@@ Initializing transform for element');
+          var ident = this.get('element').ownerSVGElement.createSVGTransform();
+          base.appendItem(ident);
+          base.consolidate();
+        }
+        var mat = base[0].matrix;
+        var tran = this.get('shape.transform');
+        if (tran !== null && tran !== undefined) {
+          //console.log('@@@@ Setting transform in component from shape model: '+JSON.stringify(tran));
+          mat.a = tran.a;
+          mat.b = tran.b;
+          mat.c = tran.c;
+          mat.d = tran.d;
+          mat.e = tran.e;
+          mat.f = tran.f;
+        }
       }
     }
   },

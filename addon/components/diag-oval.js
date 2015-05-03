@@ -1,9 +1,8 @@
 import Ember from 'ember';
 import layout from '../templates/components/diag-oval';
-import Draggable from'ember-diagram/mixins/draggable';
 import DiagShape from './diag-shape';
 
-export default DiagShape.extend(Draggable, {
+export default DiagShape.extend({
   layout: layout,
   tagName: 'ellipse',
   attributeBindings: ['cx','cy','rx','ry'],
