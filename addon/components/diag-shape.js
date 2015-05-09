@@ -4,11 +4,13 @@ import layout from '../templates/components/diag-shape';
 export default Ember.Component.extend({
   layout: layout,
   shape: null,
-  diagarm: null,
+  diagram: null,
   x: Ember.computed.alias('shape.x'),
   y: Ember.computed.alias('shape.y'),
   height: Ember.computed.alias('shape.height'),
   width: Ember.computed.alias('shape.width'),
+  attributeBindings: ['data-shape-id'],
+  'data-shape-id': Ember.computed.alias('shape.id'),
 
   initTransform: Ember.on('init', 'didInsertElement', function() {
     //console.log('@@@@ In diag-shape initTransform');
@@ -18,6 +20,44 @@ export default Ember.Component.extend({
     //console.log('@@@@ In diag-shape updateTransform');
     this.setTransform();
   }),
+
+  transformedBBox: Ember.computed('shape.{x,y,width,height,transform}','element', function() {
+    var ele = this.get('element');
+    return this.transformedBoundingBox(ele);
+  }),
+  alignmentPoint: Ember.computed('transformedBBox', function() {
+    console.log('@@@@ Computed alignmentPoint for '+this.get('shape.id'));
+    var bbox = this.get('transformedBBox');
+    if (bbox === null || bbox === undefined) {
+      return {x:100.0, y:100.0};
+    } else {
+      return {x: bbox.x+bbox.width/2.0, y:bbox.y+bbox.height/2.0};
+    }
+  }),
+
+  updateDiagramMap: Ember.observer('diagram', 'shape', function() {
+    this.registerWithDiagram();
+  }),
+
+  initDiagramMap: Ember.on('init', function() {
+    this.registerWithDiagram();
+  }),
+
+  registerWithDiagram: function() {
+    var diagram = this.get('diagram');
+    var shape = this.get('shape');
+    if (diagram !== null && diagram !== undefined &&
+      shape !== null && shape !== undefined) {
+      diagram.registerComponent(shape, this);
+      console.log('@@@@ Component registered for '+shape.get('id'));
+    } else {
+      console.log('@@@@ Observer without diagram and shape');
+    }
+  },
+
+  saveTransform: function(m) {
+    this.get('shape').set('transform', {a:m.a, b:m.b, c:m.c, d:m.d, e:m.e, f:m.f});
+  },
   setTransform: function() {
     var ele = this.get('element');
     if (ele !== null && ele !== undefined) {
@@ -43,6 +83,38 @@ export default Ember.Component.extend({
         }
       }
     }
+  },
+
+  transformedBoundingBox: function (el){
+    var bb  = el.getBBox(),
+        svg = el.ownerSVGElement,
+        m   = el.getTransformToElement(el.parentNode);
+
+    // Create an array of all four points for the original bounding box
+    var pts = [
+      svg.createSVGPoint(), svg.createSVGPoint(),
+      svg.createSVGPoint(), svg.createSVGPoint()
+    ];
+    pts[0].x=bb.x;          pts[0].y=bb.y;
+    pts[1].x=bb.x+bb.width; pts[1].y=bb.y;
+    pts[2].x=bb.x+bb.width; pts[2].y=bb.y+bb.height;
+    pts[3].x=bb.x;          pts[3].y=bb.y+bb.height;
+
+    // Transform each into the space of the parent,
+    // and calculate the min/max points from that.
+    var xMin=Infinity,xMax=-Infinity,yMin=Infinity,yMax=-Infinity;
+    pts.forEach(function(pt){
+      pt = pt.matrixTransform(m);
+      xMin = Math.min(xMin,pt.x);
+      xMax = Math.max(xMax,pt.x);
+      yMin = Math.min(yMin,pt.y);
+      yMax = Math.max(yMax,pt.y);
+    });
+
+    // Update the bounding box with the new values
+    bb.x = xMin; bb.width  = xMax-xMin;
+    bb.y = yMin; bb.height = yMax-yMin;
+    return bb;
   },
 
   actions: {

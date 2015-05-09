@@ -1,5 +1,7 @@
 {{#each shapes as |s|}}
-{{component s.componentName shape=s layer=this diagram=diagram}}
+  {{#if s.hasComponent}}
+    {{component s.component shape=s layer=this diagram=diagram}}
+  {{/if}}
 {{/each}}
 
 {{yield}}

@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import layout from '../templates/components/ember-diagram';
 
+/* global jQuery */
+
 export default Ember.Component.extend({
   layout: layout,
   tagName: "svg",
@@ -9,10 +11,52 @@ export default Ember.Component.extend({
   height: 1000,
   gesture: null,
 
+  componentMap: null,
   registerAs: null,
   registerDiagram: Ember.on('init', function() {
     this.set('registerAs', this);
   }),
+  registerComponent(shape, component) {
+    var map = this.get('componentMap');
+    if (map === null || map === undefined) {
+      map = Ember.Map.create();
+      this.set('componentMap', map);
+    }
+    console.log('@@@@ Registering component for '+shape.get('id'));
+    map.set(shape.get('id'), component);
+  },
+
+  findComponent: function(shape) {
+    var map = this.get('componentMap');
+    if (map === null || map === undefined) {
+      return null;
+    } else {
+      return map.get(shape.get('id'));
+    }
+  },
+
+  findShape: function(evt) {
+    var tar = evt.target;
+    while (tar !== null && tar !== undefined) {
+    //console.log('@@@@ Looking for hit '+jQuery(tar).html());
+      var found = null;
+      this.layers.forEach(function(l) {
+        //console.log('@@@@   Layer '+l.get('component'));
+        l.shapes.forEach(function(s) {
+          //console.log('@@@@     Shape: '+s.get('component'));
+          if (jQuery(tar).attr('data-shape-id') === s.get('id')) {
+            found = s;
+          }
+        });
+      });
+      if (found !== null) {
+        return found;
+      }
+      tar = tar.parentNode;
+    }
+    //console.log('@@@@ No match found');
+    return null;
+  },
 
   mouseDown: function(evt) {
     var gesture = this.get('gesture');

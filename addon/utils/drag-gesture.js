@@ -31,6 +31,7 @@ export default Gesture.extend({
       this.trans.setTranslate(pointLocal.x,pointLocal.y);
       this.transList.appendItem(this.trans);
       this.transList.consolidate();
+      this.get('component').saveTransform(this.transList[0].matrix);
       return false;
     }
   },

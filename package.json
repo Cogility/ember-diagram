@@ -1,6 +1,6 @@
 {
   "name": "ember-diagram",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Ember addon for drawing SVG diagrams with interaction. -- very pre alpha, under initial development",
   "directories": {
     "doc": "doc",
