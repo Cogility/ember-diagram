@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import layout from '../templates/components/ember-diagram';
+import SelectGesture from '../utils/select-gesture';
 
 /* global jQuery */
 
@@ -24,6 +25,27 @@ export default Ember.Component.extend({
     }
     console.log('@@@@ Registering component for '+shape.get('id'));
     map.set(shape.get('id'), component);
+  },
+
+  hasGestureComponent: Ember.computed('gesture','gesture.gestureComponent', function() {
+    var gesture = this.get('gesture');
+    if (gesture === null || gesture === undefined) {
+      return false;
+    } else {
+      var comp = gesture.get('gestureComponent');
+      return comp !== null && comp !== undefined;
+    }
+  }),
+
+  findComponentsInRect(rect) {
+    var result = Ember.A();
+    var map = this.get('componentMap');
+    map.forEach(function(c) {
+      if (c.inRect(rect)) {
+        result.addObject(c);
+      }
+    });
+    return result;
   },
 
   findComponent: function(shape) {
@@ -64,7 +86,13 @@ export default Ember.Component.extend({
       return gesture.mouseDown(evt);
     } else {
       //console.log('@@@@ Mouse Down button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
-      return false;
+      gesture = SelectGesture.create({
+        diagram: this,
+        diagramElement: this.get('element'),
+        container: this.get('container')
+      });
+      this.set('gesture', gesture);
+      return gesture.mouseDown(evt);
     }
   },
   mouseMove: function(evt) {
@@ -97,9 +125,10 @@ export default Ember.Component.extend({
   contextMenu: function(evt) {
     var gesture = this.get('gesture');
     if (gesture !== null && gesture !== undefined) {
+      console.log('@@@@ Sending context menu to existing gesture: '+gesture);
       return gesture.mouseUp(evt);
     } else {
-      //console.log('@@@@ ContextMenu: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
+      this.sendAction('showContextMenu', evt);
       return false;
     }
   }

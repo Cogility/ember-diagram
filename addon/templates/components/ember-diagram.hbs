@@ -1,5 +1,8 @@
 {{#each layers as |l|}}
 {{component l.component layer=l diagram=this}}
 {{/each}}
+{{#if hasGestureComponent}}
+{{component gesture.gestureComponent gesture=gesture diagram=this}}
+{{/if}}
 
 {{yield}}

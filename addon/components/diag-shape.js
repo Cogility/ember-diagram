@@ -21,12 +21,22 @@ export default Ember.Component.extend({
     this.setTransform();
   }),
 
-  transformedBBox: Ember.computed('shape.{x,y,width,height,transform}','element', function() {
+  inRect: function(rect) {
+    var bbox = this.get('transformedBBox');
+    return bbox.x <= rect.x+rect.width && bbox.x+bbox.width >= rect.x &&
+      bbox.y <= rect.y+rect.height && bbox.y+bbox.height >= rect.y;
+  },
+
+  contextMenu: function(evt) {
+    return this.get('diagram').contextMenu(evt);
+  },
+
+  transformedBBox: Ember.computed('shape.{x,y,width,height,transform}',
+    'shape.title', function() {
     var ele = this.get('element');
     return this.transformedBoundingBox(ele);
   }),
   alignmentPoint: Ember.computed('transformedBBox', function() {
-    console.log('@@@@ Computed alignmentPoint for '+this.get('shape.id'));
     var bbox = this.get('transformedBBox');
     if (bbox === null || bbox === undefined) {
       return {x:100.0, y:100.0};
@@ -49,9 +59,6 @@ export default Ember.Component.extend({
     if (diagram !== null && diagram !== undefined &&
       shape !== null && shape !== undefined) {
       diagram.registerComponent(shape, this);
-      console.log('@@@@ Component registered for '+shape.get('id'));
-    } else {
-      console.log('@@@@ Observer without diagram and shape');
     }
   },
 

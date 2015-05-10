@@ -12,9 +12,10 @@ export default Ember.Mixin.create({
     } else {
       var dg = DragGesture.create({
         diagram: d,
-        component: this
+        component: this,
+        container: this.get('container')
       });
-      dg.mouseDown(evt);
+      return dg.mouseDown(evt);
     }
   }
 });
