@@ -1,0 +1,6 @@
+svg {
+  line, rect, ellipse {
+    fill: #ddccaa;
+    stroke: black;
+  }
+}

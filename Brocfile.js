@@ -5,6 +5,13 @@ var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 var app = new EmberAddon();
 
+// Ember template compiler for tests
+if (app.env !== 'production') {
+  if (!/^1\.[89]/.test(require('./bower_components/ember/bower.json').version)) {
+    app.import('bower_components/ember/ember-template-compiler.js', { type: 'test' });
+  }
+}
+
 // Use `app.import` to add additional libraries to the generated
 // output files.
 //

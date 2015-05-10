@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import DraggableMixin from '../../../mixins/draggable';
+import DraggableMixin from 'ember-diagram/mixins/draggable';
 import { module, test } from 'qunit';
 
 module('DraggableMixin');

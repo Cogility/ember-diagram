@@ -7,10 +7,11 @@ import SelectGesture from '../utils/select-gesture';
 export default Ember.Component.extend({
   layout: layout,
   tagName: "svg",
-  attributeBindings: ['width', 'height'],
+  attributeBindings: ['width', 'height', 'xmlns'],
   width: 1000,
   height: 1000,
   gesture: null,
+  xmlns: "http://www.w3.org/2000/svg",
 
   componentMap: null,
   registerAs: null,
