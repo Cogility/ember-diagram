@@ -5,5 +5,11 @@ export default Ember.Component.extend({
   layout: layout,
   tagName: 'g',
   layer: null,
-  shapes: Ember.computed.alias('layer.shapes')
+  shapes: Ember.computed.alias('layer.shapes'),
+
+  actions: {
+    editShape: function(shape) {
+      this.sendAction('editShape', shape);
+    }
+  }
 });

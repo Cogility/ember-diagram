@@ -1,5 +1,5 @@
 {{#each layers as |l|}}
-{{component l.component layer=l diagram=this}}
+{{component l.component layer=l diagram=this editShape='editShape'}}
 {{/each}}
 {{#if hasGestureComponent}}
 {{component gesture.gestureComponent gesture=gesture diagram=this}}

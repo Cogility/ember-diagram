@@ -1,6 +1,6 @@
 {{#each shapes as |s|}}
   {{#if s.hasComponent}}
-    {{component s.component shape=s layer=this diagram=diagram}}
+    {{component s.component shape=s layer=this diagram=diagram editShape='editShape'}}
   {{/if}}
 {{/each}}
 

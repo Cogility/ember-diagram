@@ -85,7 +85,7 @@ export default Ember.Component.extend({
     var gesture = this.get('gesture');
     if (gesture !== null && gesture !== undefined) {
       return gesture.mouseDown(evt);
-    } else {
+    } else if (evt.which !== 3) {
       //console.log('@@@@ Mouse Down button: '+evt.button+' buttons: '+evt.buttons+' which: '+evt.which);
       gesture = SelectGesture.create({
         diagram: this,
@@ -127,10 +127,16 @@ export default Ember.Component.extend({
     var gesture = this.get('gesture');
     if (gesture !== null && gesture !== undefined) {
       console.log('@@@@ Sending context menu to existing gesture: '+gesture);
-      return gesture.mouseUp(evt);
+      return gesture.contextMenu(evt);
     } else {
       this.sendAction('showContextMenu', evt);
       return false;
+    }
+  },
+
+  actions: {
+    editShape: function(shape) {
+      this.sendAction('editShape', shape);
     }
   }
 });

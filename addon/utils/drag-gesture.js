@@ -9,6 +9,7 @@ export default Gesture.extend({
   transList: null,    // The transform list used to do the drag
   dragTarget: null,   // The DOM element that was the mouseDown target
   component: null,    // The component being dragged
+  moved: false,       // Flag for whether the object actually moved
 
   gesureComponent: null,
 
@@ -17,6 +18,7 @@ export default Gesture.extend({
     var sel = this.get('selection');
     var component = this.get('component');
     var shape = component.get('shape');
+    
     if (!sel.inSelection(shape)) {
       sel.clearSelection();
       sel.addSelection(shape, component);
@@ -32,12 +34,14 @@ export default Gesture.extend({
       var myTransListAnim=dragTarget.transform;
       this.transList=myTransListAnim.baseVal;
       this.set('dragging', true);
+      this.set('moved', false);
       this.dragTarget = dragTarget;
     }
     return false;
   },
   mouseMove: function(evt) {
     if (this.dragging) {
+      this.set('moved', true);
       var pointLocal = eventToSVGLocal(evt, this.dragTarget);
       pointLocal.x -= this.dragStart.x;
       pointLocal.y -= this.dragStart.y;
@@ -51,10 +55,12 @@ export default Gesture.extend({
     }
   },
   mouseUp: function(evt) {
-    console.log('@@@@ Mouse up in drag gesture: '+evt.which);
+    if (this.get('dragging') && this.get('moved')) {
+      console.log('@@@@ Mouse up in drag gesture: '+evt.which);
+      this.get('diagram').set('gesture', null);
+      this.get('component').send('dragged', this.dragStart, this.transList[0]);
+    }
     this.set('dragging', false);
-    this.get('diagram').set('gesture', null);
-    this.get('component').send('dragged', this.dragStart, this.transList[0]);
     return false;
   },
   contextMenu: function() {

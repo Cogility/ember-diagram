@@ -49,8 +49,10 @@ test('it should render from a template with foreign object block content', funct
   `);
   assert.ok(this.get('diagram') !== null, 'Failed to register diagram from template');
   assert.equal(this.$('span div b').length, 1, 'Failed to find foreign object element');
-  assert.ok(this.$('span div b').height() > 0, 'Failed to render svg foreign object with height');
-  assert.ok(this.$('span div b').width() > 0, 'Failed to render svg foreign object with width');
+  var bbox = this.$('span div b')[0].getBBox();
+  console.log('@@@@ Bounding box of foreign object: '+JSON.stringify(bbox));
+  assert.ok(bbox.height > 0, 'Failed to render svg foreign object with height');
+  assert.ok(bbox.width > 0, 'Failed to render svg foreign object with width');
 });
 
 test('it should render nested shapes', function(assert) {
